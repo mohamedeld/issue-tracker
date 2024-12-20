@@ -15,6 +15,9 @@ export async function PATCH(req:NextRequest,{params}:IParams){
         id:Number(id)
       }
     })
+    if(!issue){
+      return NextResponse.json({error:"Issue not found"},{status : 401});
+    }
     const body = await req.json()
     const validation = createIssueSchema.safeParse(body);
     if(!validation?.success){
@@ -30,6 +33,29 @@ export async function PATCH(req:NextRequest,{params}:IParams){
       }
     })
     return NextResponse.json(updatedIssue,{status:200})
+  }catch(error){
+    return new NextResponse(error instanceof Error ? error?.message : 'Something went wrong');
+  }
+}
+
+export async function DELETE(req:NextRequest,{params}:IParams){
+  try{
+    const {id} = params;
+    const issue = await prisma.issue.findUnique({
+      where:{
+        id:Number(id)
+      }
+    })
+    if(!issue){
+      return NextResponse.json({error:"Issue not found"},{status : 401});
+    }
+    
+    const DeleteIssue = await prisma.issue.delete({
+      where:{
+        id:Number(id)
+      }
+    })
+    return NextResponse.json(DeleteIssue,{status:200})
   }catch(error){
     return new NextResponse(error instanceof Error ? error?.message : 'Something went wrong');
   }

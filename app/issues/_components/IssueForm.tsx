@@ -1,10 +1,8 @@
 'use client';
 import { Button, Callout, Spinner, TextField } from '@radix-ui/themes'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
-import dynamic from 'next/dynamic';
-const SimpleMDE = dynamic(()=> import("react-simplemde-editor"),{
-  ssr:false
-})
+import SimpleMDE from "react-simplemde-editor"
+
 import {useForm,Controller } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import axios from "axios"
@@ -36,14 +34,18 @@ const IssueForm = ({issue}:IProps) => {
         const response = await axios.patch(`/api/issues/${issue?.id}`,values);
         if(response?.status === 200){
           toast.success("Updated Successfully");
+          router.push("/issues");
+          router.refresh();
+        }
+      }else{
+        const response = await axios.post("/api/issues",values);
+        if(response?.status === 201){
+          toast.success("Created Successfully");
           router.push("/issues")
+          router.refresh();
         }
       }
-      const response = await axios.post("/api/issues",values);
-      if(response?.status === 201){
-        toast.success("Created Successfully");
-        router.push("/issues")
-      }
+      
     }catch(error){
       console.log(error);
       toast.error(error instanceof Error ? error?.message : "Something went wrong")

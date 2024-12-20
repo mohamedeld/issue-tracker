@@ -8,6 +8,7 @@ import { Pencil2Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import EditIssueButton from "./_components/editIssueButton";
 import IssueDetailContent from "./_components/IssueDetailContent";
+import DeleteIssueButton from "../_components/DeleteIssueButton";
 interface IProps {
   params: {
     id: string
@@ -37,7 +38,12 @@ const IssueDetailPage = async ({ params }: IProps) => {
         <IssueDetailContent issue={issue}/>
       </Box>
       <Box>
+        
+          
        <EditIssueButton href={`/issues/${issue?.id}/edit`}/>
+      
+         <DeleteIssueButton issueId={issue?.id}/>
+        
       </Box>
     </Grid>
   )

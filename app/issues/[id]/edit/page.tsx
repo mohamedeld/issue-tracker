@@ -1,6 +1,16 @@
 import { notFound, redirect } from "next/navigation";
-import IssueForm from "../../_components/IssueForm"
 import prisma from "@/prisma/client";
+import dynamic from "next/dynamic";
+import IssueFormSkeleton from "../../_components/IssueFormSkeleton";
+
+const IssueForm = dynamic(
+  ()=> import("../../_components/IssueForm"),
+  {
+    
+    ssr:false,
+    loading:()=> <p><IssueFormSkeleton/></p>
+  }
+)
 
 interface IProps{
   params:{

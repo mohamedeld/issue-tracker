@@ -15,7 +15,7 @@ const IssueDetailContent = ({issue}:IProps) => {
         <IssueStatusBade status={issue?.status} />
         <Text>{issue?.createdAt?.toDateString()}</Text>
       </Flex>
-      <Card className="prose" mt="4">
+      <Card className="prose max-w-full" mt="4">
         <Markdown>{issue?.description}</Markdown>
       </Card>
     </>
