@@ -13,7 +13,6 @@ interface IProps {
 const DeleteIssueButton = ({ issueId }: IProps) => {
   const router = useRouter();
   const [loading,setLoading] = useState(false);
-  const [open,setOpen] = useState(false);
 
   async function handleDelete(){
     try{
@@ -22,8 +21,7 @@ const DeleteIssueButton = ({ issueId }: IProps) => {
       if(response?.status === 200){
         toast.success("Deleted Successfully");
         setLoading(false)
-        router.push("/issues");
-        setOpen(false)
+        router.push("/issues/list");
         router.refresh();
       }
     }catch(error){
@@ -33,9 +31,16 @@ const DeleteIssueButton = ({ issueId }: IProps) => {
   }
   return (
     <>
-      <AlertDialog.Root open={open} onOpenChange={setOpen}>
+      <AlertDialog.Root>
         <AlertDialog.Trigger>
-        <Button mr="5" color="red">Delete issue</Button>
+        <Button mr="5" color="red">{
+                  loading ? (
+                    <>
+                      <Spinner/>
+                      Deleting...
+                    </>
+                  ):"Delete issue"
+                }</Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content maxWidth="450px">
           <AlertDialog.Title>Delete Issue</AlertDialog.Title>
@@ -52,14 +57,7 @@ const DeleteIssueButton = ({ issueId }: IProps) => {
             </AlertDialog.Cancel>
             <AlertDialog.Action>
               <Button variant="solid" disabled={loading} color="red" onClick={handleDelete}>
-                {
-                  loading ? (
-                    <>
-                      <Spinner/>
-                      Deleting...
-                    </>
-                  ):"Delete"
-                }
+                Delete
               </Button>
             </AlertDialog.Action>
           </Flex>

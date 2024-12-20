@@ -34,14 +34,14 @@ const IssueForm = ({issue}:IProps) => {
         const response = await axios.patch(`/api/issues/${issue?.id}`,values);
         if(response?.status === 200){
           toast.success("Updated Successfully");
-          router.push("/issues");
+          router.push("/issues/list");
           router.refresh();
         }
       }else{
         const response = await axios.post("/api/issues",values);
         if(response?.status === 201){
           toast.success("Created Successfully");
-          router.push("/issues")
+          router.push("/issues/list")
           router.refresh();
         }
       }
