@@ -1,35 +1,45 @@
+import IssueStatusBade from "@/app/components/IssueStatusBade";
 import prisma from "@/prisma/client";
-import { notFound, redirect } from "next/navigation";
+import Markdown from 'react-markdown'
 
-interface IProps{
-  params:{
-    id:string
+import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
+import { notFound, redirect } from "next/navigation";
+import { Pencil2Icon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import EditIssueButton from "./_components/editIssueButton";
+import IssueDetailContent from "./_components/IssueDetailContent";
+interface IProps {
+  params: {
+    id: string
   }
 }
 
-const IssueDetailPage = async ({params}:IProps) => {
-  const {id} = params;
-  if(!id){
+const IssueDetailPage = async ({ params }: IProps) => {
+  const { id } = params;
+  if (!id) {
     redirect("/");
   }
-  if(typeof id !== 'number'){
-    notFound();
-  }
+  
   const issue = await prisma.issue.findUnique({
-    where:{
-      id:Number(id)
+    where: {
+      id: Number(id)
     }
   })
-  if(!issue){
+  if (!issue) {
     notFound();
   }
   return (
-    <div>
-      <p>{issue?.title}</p>
-      <p>{issue?.description}</p>
-      <p>{issue?.status}</p>
-      <p>{issue?.createdAt?.toDateString()}</p>
-    </div>
+    <Grid columns={{
+      initial:"1",
+      md:"2"
+    }} gap="5">
+      <Box>
+        <IssueDetailContent issue={issue}/>
+      </Box>
+      <Box>
+       <EditIssueButton href={`/issues/${issue?.id}/edit`}/>
+      </Box>
+    </Grid>
   )
 }
 
